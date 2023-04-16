@@ -7,7 +7,15 @@ import idl from '/src/token-metadata/idl.js';
 
 # Instructions
 
-## Create a Metadata account
+:::info
+Since version v1.7.0, a new set of instructions has been introduced to support the new Programmable NFT Token Standard. These instructions can be used for any Token Standard and will eventually replace some of the instructions listed below, and are listed in the `New Unified Handlers` section.
+
+You can read more about these new instructions in [the Programmable NFTs guide](https://github.com/metaplex-foundation/metaplex-program-library/blob/master/token-metadata/program/ProgrammableNFTGuide.md).
+:::
+
+## Legacy Instructions
+
+### Create a Metadata account
 
 <ProgramInstruction idl={idl} instruction="CreateMetadataAccountV3">
 
@@ -17,7 +25,7 @@ This instruction creates and initializes a new [Metadata](./accounts#metadata) a
 
 </ProgramInstruction>
 
-## Update a Metadata account
+### Update a Metadata account
 
 <ProgramInstruction idl={idl} instruction="UpdateMetadataAccountV2">
 
@@ -27,24 +35,23 @@ This instruction enables us to update parts of the Metadata account. Note that s
 
 </ProgramInstruction>
 
-## Burn a NFT
+### Burn a NFT
 
 <ProgramInstruction idl={idl} instruction="BurnNft">
 
 This instruction enables the owner of the NFT to completely burn it:
 
-* burning the SPL token and closing the token account
-* closing the metadata and edition accounts
-* giving the owner the reclaimed funds from closing these accounts
+- burning the SPL token and closing the token account
+- closing the metadata and edition accounts
+- giving the owner the reclaimed funds from closing these accounts
 
 This handler checks if the NFT is a member of a verified collection, and if it is, requires the collection metadata account be passed in so the size can be decremented.
 
 This handler will not close metadata and edition accounts where the token has already been burned and the mint has a supply of 0. At that point there is no official "owner" of the NFT.
 
-
 </ProgramInstruction>
 
-## Burn an Edition NFT
+### Burn an Edition NFT
 
 <ProgramInstruction idl={idl} instruction="BurnEditionNft">
 
@@ -56,7 +63,7 @@ This instruction enables the owner of a Print Edition NFT to completely burn it:
 
 This handler checks if the NFT is a Print Edition and not a Master edition, and decrements the Master Edition supply fields after burning the NFT.
 
-The Master Edition `supply` is decremented every time a Print Edition is burned. If the owner of the Master Edition is not the same as the owner of the Print Edition, the `max_supply` is also decremented. 
+The Master Edition `supply` is decremented every time a Print Edition is burned. If the owner of the Master Edition is not the same as the owner of the Print Edition, the `max_supply` is also decremented.
 
 Print Editions burned by the owner ("the creator") of the Master Edition can be reminted, but print editions burned by other owners ("users") cannot be reminted.
 
@@ -64,8 +71,7 @@ This handler will not close metadata and edition accounts where the token has al
 
 </ProgramInstruction>
 
-
-## Indicate the primary sale has happened
+### Indicate the primary sale has happened
 
 <ProgramInstruction idl={idl} instruction="UpdatePrimarySaleHappenedViaToken">
 
@@ -75,7 +81,7 @@ This instruction flips the `Primary Sale Happened` flag to `True`, indicating th
 
 </ProgramInstruction>
 
-## Verify a creator
+### Verify a creator
 
 <ProgramInstruction idl={idl} instruction="SignMetadata">
 
@@ -85,7 +91,7 @@ This instruction verifies one creator on the Metadata account. As long as the pr
 
 </ProgramInstruction>
 
-## Unverify a creator
+### Unverify a creator
 
 <ProgramInstruction idl={idl} instruction="RemoveCreatorVerification">
 
@@ -95,7 +101,7 @@ This instruction unverifies one creator on the Metadata account. As long as the 
 
 </ProgramInstruction>
 
-## Create a Master Edition account
+### Create a Master Edition account
 
 <ProgramInstruction idl={idl} instruction="CreateMasterEditionV3">
 
@@ -111,9 +117,9 @@ If these conditions are met, **it will transfer the Mint Authority and the Freez
 
 </ProgramInstruction>
 
-## Print a new Edition from a Master Edition
+### Print a new Edition from a Master Edition
 
-### Via owning the token
+#### Via owning the token
 
 <ProgramInstruction idl={idl} instruction="MintNewEditionFromMasterEditionViaToken">
 
@@ -127,7 +133,7 @@ It requires the same conditions as the Master Edition account regarding the Mint
 
 </ProgramInstruction>
 
-### Via a Vault proxy
+#### Via a Vault proxy
 
 <ProgramInstruction idl={idl} instruction="MintNewEditionFromMasterEditionViaVaultProxy">
 
@@ -137,7 +143,7 @@ It requires the same conditions as the Master Edition account regarding the Mint
 
 </ProgramInstruction>
 
-## Verify a collection item
+### Verify a collection item
 
 <ProgramInstruction idl={idl} instruction="VerifyCollection">
 
@@ -149,19 +155,19 @@ Clients should detect if a NFT is part of a sized collection or not and call the
 
 </ProgramInstruction>
 
-## Verify a sized collection item
+### Verify a sized collection item
 
 <ProgramInstruction idl={idl} instruction="VerifySizedCollectionItem">
 
 ![](/assets/programs/token-metadata/Token-Metadata-Instruction-Verify-Sized-Collection.png)
 
-This instruction verifies the collection of a Metadata account, by setting the `Verified` boolean to `True` on the `Collection` field, and increments the size field of the parent NFT. Calling it on a collection whose parent NFT does not have a size field will throw an error. 
+This instruction verifies the collection of a Metadata account, by setting the `Verified` boolean to `True` on the `Collection` field, and increments the size field of the parent NFT. Calling it on a collection whose parent NFT does not have a size field will throw an error.
 
 Clients should detect if a NFT is part of a sized collection or not and call the appropriate handler for the user to abstract away this detail.
 
 </ProgramInstruction>
 
-## Unverify a collection item
+### Unverify a collection item
 
 <ProgramInstruction idl={idl} instruction="UnverifyCollection">
 
@@ -173,7 +179,7 @@ Clients should detect if a NFT is part of a sized collection or not and call the
 
 </ProgramInstruction>
 
-## Unverify a sized collection item
+### Unverify a sized collection item
 
 <ProgramInstruction idl={idl} instruction="UnverifySizedCollectionItem">
 
@@ -185,7 +191,7 @@ Clients should detect if a NFT is part of a sized collection or not and call the
 
 </ProgramInstruction>
 
-## Set and verify the collection
+### Set and verify the collection
 
 <ProgramInstruction idl={idl} instruction="SetAndVerifyCollection">
 
@@ -195,7 +201,7 @@ Clients should detect if a NFT is part of a sized collection or not and call the
 
 </ProgramInstruction>
 
-## Set and verify a sized collection item
+### Set and verify a sized collection item
 
 <ProgramInstruction idl={idl} instruction="SetAndVerifySizedCollectionItem">
 
@@ -205,7 +211,7 @@ Clients should detect if a NFT is part of a sized collection or not and call the
 
 </ProgramInstruction>
 
-## Approve a new Collection Authority
+### Approve a new Collection Authority
 
 <ProgramInstruction idl={idl} instruction="ApproveCollectionAuthority">
 
@@ -217,7 +223,7 @@ The program keeps track of all the collection authorities that have been approve
 
 </ProgramInstruction>
 
-## Revoke an existing Collection Authority
+### Revoke an existing Collection Authority
 
 <ProgramInstruction idl={idl} instruction="RevokeCollectionAuthority">
 
@@ -229,7 +235,7 @@ It does this by deleting the provided `Collection Authority Record` PDA.
 
 </ProgramInstruction>
 
-## Reduce the number of uses
+### Reduce the number of uses
 
 <ProgramInstruction idl={idl} instruction="Utilize">
 
@@ -241,7 +247,7 @@ This can either be done by the `Update Authority` of the Metadata account or by 
 
 </ProgramInstruction>
 
-## Approve a new Use Authority
+### Approve a new Use Authority
 
 <ProgramInstruction idl={idl} instruction="ApproveUseAuthority">
 
@@ -253,7 +259,7 @@ The program keeps track of all the use authorities that have been approved via [
 
 </ProgramInstruction>
 
-## Revoke an existing Use Authority
+### Revoke an existing Use Authority
 
 <ProgramInstruction idl={idl} instruction="RevokeUseAuthority">
 
@@ -265,7 +271,7 @@ It does this by deleting the provided `Use Authority Record` PDA.
 
 </ProgramInstruction>
 
-## Freeze the token account as a delegate
+### Freeze the token account as a delegate
 
 <ProgramInstruction idl={idl} instruction="FreezeDelegatedAccount">
 
@@ -279,7 +285,7 @@ Here's a small guide on [how to freeze a Token account using this instruction](h
 
 </ProgramInstruction>
 
-## Thaw the token account as a delegate
+### Thaw the token account as a delegate
 
 <ProgramInstruction idl={idl} instruction="ThawDelegatedAccount">
 
@@ -287,7 +293,7 @@ This instruction reverts the instruction above by unfreezing a Token account, on
 
 </ProgramInstruction>
 
-## Add padding to Metadata account fields
+### Add padding to Metadata account fields
 
 <ProgramInstruction idl={idl} instruction="PuffMetadata">
 
@@ -297,7 +303,7 @@ Note that, this is automatically done by the Token Metadata program when creatin
 
 </ProgramInstruction>
 
-## Upgrade Master Edition from V1 to V2
+### Upgrade Master Edition from V1 to V2
 
 <ProgramInstruction idl={idl} instruction="ConvertMasterEditionV1ToV2">
 
@@ -305,25 +311,66 @@ This instruction serves as a migration tool that upgrades a Master Edition accou
 
 </ProgramInstruction>
 
-## Set collection size
+### Set collection size
 
 <ProgramInstruction idl={idl} instruction="SetCollectionSize">
 
 ![](/assets/programs/token-metadata/Token-Metadata-Instruction-Set-Collection-Size.png)
 
-This instruction allows the update authority of a collection parent NFT to set the size of the collection **once** in order to allow existing unsized collections to be updated to track size. Once a collection is sized it can only be verified and unverified by the sized handlers and can't be changed back to unsized. 
+This instruction allows the update authority of a collection parent NFT to set the size of the collection **once** in order to allow existing unsized collections to be updated to track size. Once a collection is sized it can only be verified and unverified by the sized handlers and can't be changed back to unsized.
 
 </ProgramInstruction>
 
-
-## Set token standard
+### Set token standard
 
 <ProgramInstruction idl={idl} instruction="SetTokenStandard">
 
 ![](/assets/programs/token-metadata/Token-Metadata-Instruction-Set-Token-Standard.png)
 
-
 This instruction allows an update authority to pass in a metadata account with an optional edition account and then it determines what the correct TokenStandard type is and writes it to the metadata. See [Token Standard](./token-standard) for more information.
 
+</ProgramInstruction>
+
+## New Unified Handlers V1.7+
+
+### Burn
+
+<ProgramInstruction idl={idl} instruction="Burn">
+
+![](/assets/programs/token-metadata/Token-Metadata-Instruction-Burn.png)
+
+Burns an asset, closing associated accounts.
+
+Supports burning the following asset types:
+
+- ProgrammableNonFungible
+- NonFungible
+- NonFungibleEdition
+- Fungible
+- FungibleAsset
+
+Parent accounts are only required for burning print editions and are the accounts for the master edition associated with the print edition. Parent edition is the master edition account, parent mint is the mint account of the master edition NFT etc.
+
+The Token Record account is required for burning a ProgrammableNonFungible asset.
+
+This handler closes the following accounts:
+
+For ProgrammableNonFungible assets:
+
+- Metadata, Edition, Token, TokenRecord
+
+For NonFungible assets:
+
+- Metadata, Edition, Token
+
+For NonFungibleEdition assets:
+
+- Metadata, Edition, Token, and the EditionMarker, if all prints for it are burned.
+
+For Fungible assets:
+
+- Only the token account, if all tokens are burned.
+
+Mint accounts are owned by the immutable Token program and cannot be closed.
 
 </ProgramInstruction>
